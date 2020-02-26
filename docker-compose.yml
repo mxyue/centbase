@@ -1,0 +1,8 @@
+version: '3.7'
+
+services:
+  centbase:
+    image: centbase:v1.0 
+    build:
+      context: .
+      dockerfile: Dockerfile
