@@ -19,9 +19,30 @@ RUN chmod 600 /root/.ssh/authorized_keys
 
 RUN echo 'PS1="\[\e[0;1m\]┌─( \[\e[31;1m\]\u\[\e[0;1m\] docker) – ( \[\e[36;1m\]\w\[\e[0;1m\] )\n└─┤ \[\e[0m\]"' >> /root/.bashrc
 
-ADD ./git.repo /etc/yum.repos.d/
+ADD git.repo /etc/yum.repos.d/
 RUN rpm --import http://opensource.wandisco.com/RPM-GPG-KEY-WANdisco
 RUN yum -y install git
 
-EXPOSE 22
-CMD ["/usr/sbin/sshd", "-D"]
+RUN yum -y install make
+RUN yum -y install gcc gcc+ gcc-c++
+
+RUN yum install -y epel-release 
+
+RUN rpm -ivh http://nginx.org/packages/centos/7/noarch/RPMS/nginx-release-centos-7-0.el7.ngx.noarch.rpm
+RUN yum -y install nginx
+
+RUN yum -y install crontabs
+
+RUN yum -y install net-tools
+RUN yum -y install telnet
+RUN yum -y install monit
+
+COPY monitrc /etc/
+COPY monit_crond /etc/monit.d/
+COPY monit_sshd /etc/monit.d/
+COPY monit_nginx /etc/monit.d/
+
+
+ENTRYPOINT ["/usr/bin/monit", "-I"]
+
+
