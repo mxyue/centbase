@@ -38,6 +38,7 @@ RUN yum -y install telnet
 RUN yum -y install monit
 
 COPY monitrc /etc/
+RUN chmod 700 /etc/monitrc
 COPY monit_crond /etc/monit.d/
 COPY monit_sshd /etc/monit.d/
 COPY monit_nginx /etc/monit.d/
